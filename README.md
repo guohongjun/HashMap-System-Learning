@@ -19,16 +19,16 @@ public class HashMap<K,V>
 }
 
 ```
-**实现原理**：
+**实现原理:**
 简单地说，hashmap的key做hash算法，并将hash值映射到内存地址，直接取得key对应的value。
 HashMap的高性能需要保证以下几点：
 - 将key hashd的算法必须是高效的
 - hash值映射到内存地址（数组索引）的算法是快速的
 - 根据内存地址（数组索引）可以直接取得对应的值
 
-## HashMap的数据结构 ##
+##HashMap的数据结构##
 
-## HashMap的几个关键属性 ##
-## HashMap的存取实现##
-## fail-fast策略##
-## Hash冲突以及如何解决hash冲突##
+##HashMap的几个关键属性##
+##HashMap的存取实现##
+##fail-fast策略##
+##Hash冲突以及如何解决hash冲突##
