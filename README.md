@@ -33,29 +33,47 @@ HashMap的高性能需要保证以下几点：
 
 观察hashmap的结构图，我们了解到hashmap底层是一个数组，数组中每一项是一个链表。HashMap提供了三个构造函数：
 
+- HashMap()是一个默认的构造器，初始容量16，负载因子为0.75.
+- HashMap(int initialCapacity)是一个指定初始容量为initialCapacity，负载因子为0.75的空的hashmap。
+- HashMap(int initialCapacity, float loadFactor)是一个指定初始容量为initialCapacity，负载因子为loadFactor的空的hashmap。
+
 我们查看一下hashmap的初始化源码：
 ```java
-  public HashMap(int initialCapacity, float loadFactor) {
-        if (initialCapacity < 0)
-            throw new IllegalArgumentException("Illegal initial capacity: " +initialCapacity);
-        if (initialCapacity > MAXIMUM_CAPACITY)
-            initialCapacity = MAXIMUM_CAPACITY;
-        if (loadFactor <= 0 || Float.isNaN(loadFactor))
-            throw new IllegalArgumentException("Illegal load factor: " +loadFactor);
+public HashMap() {
+    this(DEFAULT_INITIAL_CAPACITY,DEFAULT_LOAD_FACTOR);
+}
+  
+public HashMap(int initialCapacity) {
+    this(initialCapacity, DEFAULT_LOAD_FACTOR);
+}
+
+public HashMap(int initialCapacity, float loadFactor) {
+    if (initialCapacity < 0)
+        throw new IllegalArgumentException("Illegal initial capacity: " +initialCapacity);
+    if (initialCapacity > MAXIMUM_CAPACITY)
+        initialCapacity = MAXIMUM_CAPACITY;
+    if (loadFactor <= 0 || Float.isNaN(loadFactor))
+        throw new IllegalArgumentException("Illegal load factor: " +loadFactor);
         this.loadFactor = loadFactor;
         threshold = initialCapacity;
         init();
-    }
+}
 ```
 这是个要初始化hashmap的大小和负载因子的构造器。
 
 ##HashMap的几个关键属性##
 
+
+
 ##HashMap的存取实现##
+
+
 
 ##fail-fast策略##
 
+
 ##Hash冲突以及如何解决hash冲突##
+
 
 
   [1]: http://dl.iteye.com/upload/picture/pic/63364/042032ea-6f15-3428-bfb4-b3b1460769a7.jpg
