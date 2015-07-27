@@ -62,18 +62,18 @@ public HashMap(int initialCapacity, float loadFactor) {
 这是个要初始化hashmap的大小和负载因子的构造器。
 
 ##HashMap的几个关键属性##
-
+---
 
 
 ##HashMap的存取实现##
-
+---
 
 
 ##fail-fast策略##
-
+---
 
 ##Hash冲突以及如何解决hash冲突##
-
+---
 
 
   [1]: http://img.my.csdn.net/uploads/201211/17/1353118778_2052.png
