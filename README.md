@@ -7,8 +7,6 @@
 >* fail-fast策略
 >* Hash冲突以及如何解决hash冲突
 
-
-
 ## HashMap概述 ##
 ---
 >定义：HashMap实现了Map接口，继承自AbstractMap。其中Map接口定义了键映射到值的规则，而AbstractMap类提供 Map 接口的骨干实现，以最大限度地减少实现此接口所需的工作，其实AbstractMap类已经实现了Map，这里标注MapLZ觉得应该是更加清晰！
@@ -19,7 +17,6 @@ public class HashMap<K,V>
     implements Map<K,V>, Cloneable, Serializable{
 
 }
-
 ```
 **实现原理:**
 简单地说，hashmap的key做hash算法，并将hash值映射到内存地址，直接取得key对应的value。
@@ -33,7 +30,23 @@ HashMap的高性能需要保证以下几点：
 -------
 >hashmap的数据结构：在java语言中，最基本的数据结构就两种，一种是数组，另一种是模拟指针（引用），所有的数据结构都可以使用这两种数据结构构造，hashmap也是可以这样的。hashmap其实就是链表散列，是数组和链表的结合体。
 ![此处输入图片的描述][1]
+观察hashmap的结构图，我们了解到hashmap底层是一个数组，数组中每一项是一个链表。HashMap提供了三个构造函数：
 
+我们查看一下hashmap的初始化源码：
+```java
+  public HashMap(int initialCapacity, float loadFactor) {
+        if (initialCapacity < 0)
+            throw new IllegalArgumentException("Illegal initial capacity: " +initialCapacity);
+        if (initialCapacity > MAXIMUM_CAPACITY)
+            initialCapacity = MAXIMUM_CAPACITY;
+        if (loadFactor <= 0 || Float.isNaN(loadFactor))
+            throw new IllegalArgumentException("Illegal load factor: " +loadFactor);
+        this.loadFactor = loadFactor;
+        threshold = initialCapacity;
+        init();
+    }
+```
+这是个要初始化hashmap的大小和负载因子的构造器。
 
 ##HashMap的几个关键属性##
 
