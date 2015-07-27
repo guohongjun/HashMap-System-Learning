@@ -8,7 +8,7 @@
 >* Hash冲突以及如何解决hash冲突
 
 ## HashMap概述 ##
----
+
 >定义：HashMap实现了Map接口，继承自AbstractMap。其中Map接口定义了键映射到值的规则，而AbstractMap类提供 Map 接口的骨干实现，以最大限度地减少实现此接口所需的工作，其实AbstractMap类已经实现了Map，这里标注MapLZ觉得应该是更加清晰！
 
 ```java 
@@ -27,7 +27,6 @@ HashMap的高性能需要保证以下几点：
 - 根据内存地址（数组索引）可以直接取得对应的值
 
 ##HashMap的数据结构##
--------
 >hashmap的数据结构：在java语言中，最基本的数据结构就两种，一种是数组，另一种是模拟指针（引用），所有的数据结构都可以使用这两种数据结构构造，hashmap也是可以这样的。hashmap其实就是链表散列，是数组和链表的结合体。图片来自于[作者：egg](xtfggef@gmail.com)的文章。
 ![此处输入图片的描述][1]
 
@@ -62,18 +61,18 @@ public HashMap(int initialCapacity, float loadFactor) {
 这是个要初始化hashmap的大小和负载因子的构造器。
 
 ##HashMap的几个关键属性##
----
+
 
 
 ##HashMap的存取实现##
----
+
 
 
 ##fail-fast策略##
----
+>fail-fast策略：我们知道hashmap不是线程安全的，如果我们在使用迭代器过程中其他线程更改了map，就会抛出ConcurrentModificationException，这就是所谓fail-fast策略。
 
 ##Hash冲突以及如何解决hash冲突##
----
+
 
 
   [1]: http://img.my.csdn.net/uploads/201211/17/1353118778_2052.png
