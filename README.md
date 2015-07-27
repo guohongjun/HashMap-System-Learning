@@ -28,7 +28,7 @@ HashMap的高性能需要保证以下几点：
 
 ##HashMap的数据结构##
 -------
->hashmap的数据结构：在java语言中，最基本的数据结构就两种，一种是数组，另一种是模拟指针（引用），所有的数据结构都可以使用这两种数据结构构造，hashmap也是可以这样的。hashmap其实就是链表散列，是数组和链表的结合体。
+>hashmap的数据结构：在java语言中，最基本的数据结构就两种，一种是数组，另一种是模拟指针（引用），所有的数据结构都可以使用这两种数据结构构造，hashmap也是可以这样的。hashmap其实就是链表散列，是数组和链表的结合体。图片来自于[作者：egg](xtfggef@gmail.com)的文章。
 ![此处输入图片的描述][1]
 
 观察hashmap的结构图，我们了解到hashmap底层是一个数组，数组中每一项是一个链表。HashMap提供了三个构造函数：
@@ -76,4 +76,4 @@ public HashMap(int initialCapacity, float loadFactor) {
 
 
 
-  [1]: http://dl.iteye.com/upload/picture/pic/63364/042032ea-6f15-3428-bfb4-b3b1460769a7.jpg
+  [1]: http://img.my.csdn.net/uploads/201211/17/1353118778_2052.png
