@@ -61,8 +61,8 @@ public HashMap(int initialCapacity, float loadFactor) {
 ```
 
 ##HashMap的几个关键属性##
-> initialCapacity
->加载因子loadFactor
+#### 1，initialCapacity
+#### 2，加载因子loadFactor
 
 - initialCapacity为hashmap的最大容量，也就是底层数组的长度。
 - loadFactor为加载因子，即散列表的实际元素数目(n)/ 散列表的容量(m)。另外，laodFactor越大，存储长度越小，查询时间越长。loadFactor越小，存储长度越大，查询时间短。hashmap默认的是0.75.负载因子衡量的是一个散列表的空间的使用程度，负载因子越大表示散列表的装填程度越高，反之愈小。对于使用链表法的散列表来说，查找一个元素的平均时间是O(1+a)。
