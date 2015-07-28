@@ -6,6 +6,7 @@
 >* HashMap的存取实现
 >* fail-fast策略
 >* Hash冲突以及如何解决hash冲突
+>* HashMap和Hashtable区别
 
 ## HashMap概述 ##
 
@@ -69,9 +70,47 @@ public HashMap(int initialCapacity, float loadFactor) {
 
 
 ##fail-fast策略##
->fail-fast策略：我们知道hashmap不是线程安全的，如果我们在使用迭代器过程中其他线程更改了map，就会抛出ConcurrentModificationException，这就是所谓fail-fast策略。
+> fail-fast策略：我们知道hashmap不是线程安全的，如果我们在使用迭代器过程中其他线程更改了map，就会抛出ConcurrentModificationException，这就是所谓fail-fast策略。
+
+那么这个fail-fast策略是如何实现的呢？
+这个策略主要是通过modCount的这个值实现的，modCount顾名思义就是hashmap的修改次数。每次在hashmap的内容被修改都会增加这个值，那么在hashmap的迭代器被初始化的都会将这个值赋值给expectedModCount。
+
+```java 
+HashIterator() {
+    expectedModCount = modCount;
+    if (size > 0) { // advance to first entry
+        Entry[] t = table;
+        while (index < t.length && (next = t[index++]) == null);
+        }
+    }
+```
+在hashmap的迭代器执行的过程中，代码会判断modCount和expectedModCount的值，如果不相等则表示hashmap的其他线程修改。
+```java
+public final boolean hasNext() {
+    return next != null;
+}
+
+    final Entry<K,V> nextEntry() {
+        if (modCount != expectedModCount)
+            throw new ConcurrentModificationException();
+        Entry<K,V> e = next;
+        if (e == null)
+            throw new NoSuchElementException();
+
+        if ((next = e.next) == null) {
+            Entry[] t = table;
+            while (index < t.length && (next = t[index++]) == null);
+       }
+        current = e;
+        return e;
+        }
+```
 
 ##Hash冲突以及如何解决hash冲突##
+
+
+##HashMap和Hashtable区别##
+
 
 
 
