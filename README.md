@@ -71,6 +71,10 @@ public HashMap(int initialCapacity, float loadFactor) {
 
 
 
+
+
+
+
 ##fail-fast策略##
 > fail-fast策略：我们知道hashmap不是线程安全的，如果我们在使用迭代器过程中其他线程更改了map，就会抛出ConcurrentModificationException，这就是所谓fail-fast策略。
 
@@ -112,7 +116,13 @@ final Entry<K,V> nextEntry() {
 
 
 ##HashMap和Hashtable区别##
+> hashMap和hashTable采用的是相同的存储机制，两者的实现基本一致。
 
+不同的是：
+
+- hashmap可以key和value均可以为null，而hashtable则不可以。hashtable不允许null的值，hashtable的key为null的时候，hashtable调用put方法时，直接抛出NullPointerException。其它细微的差别还有，比如初始化Entry数组的大小等等。
+- hashtable是线程安全的，内部的方法基本都是synchronized。hashmap则不是线程安全的。
+- hashtable中的hash数组默认是11，增加方式old*2+1。hashmap中hash数组的默认大小是16，而且一定是2的指数。
 
 
 
