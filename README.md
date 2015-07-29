@@ -181,7 +181,6 @@ final Entry<K,V> nextEntry() {
 
 ##Hash冲突以及如何解决hash冲突##
 其实，我在说hashmap存储的时候，已经简单地说起了hashmap的hash冲突。一次在面试的时候被人问起来了这个事，当时没有答上来，觉得有点丢人哈。为了让读了我的这篇文章的人以后避免我的感概，所以我就给大家介绍一下该hashmap的hash冲突。
->定义：
 
 
 ##HashMap和Hashtable区别##
