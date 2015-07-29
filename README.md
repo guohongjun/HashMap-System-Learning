@@ -68,10 +68,79 @@ public HashMap(int initialCapacity, float loadFactor) {
 - loadFactor为加载因子，即散列表的实际元素数目(n)/ 散列表的容量(m)。另外，laodFactor越大，存储长度越小，查询时间越长。loadFactor越小，存储长度越大，查询时间短。hashmap默认的是0.75.负载因子衡量的是一个散列表的空间的使用程度，负载因子越大表示散列表的装填程度越高，反之愈小。对于使用链表法的散列表来说，查找一个元素的平均时间是O(1+a)。
 
 ##HashMap的存取实现##
+- 1,存储：
+我们先看看hashmap的put()方法的源码：
+```java 
+public V put(K key, V value) {
+    // 如果table为null，inflate 该table
+    if (table == EMPTY_TABLE) {
+        inflateTable(threshold);
+    }
+    // 当key为null，调用putForNullKey方法，保存null与table第一个位置中，这是HashMap允许为null的原因
+    if (key == null)
+        return putForNullKey(value);
+    // 根据key的hashcode进行计算hash值。
+    int hash = hash(key);
+    // 根据指定hash值在找到对应的table中的索引。 
+    int i = indexFor(hash, table.length);
+    // 若 i 索引处的 Entry 不为 null，通过循环不断遍历 e 元素的下一个元素。
+    for (Entry<K,V> e = table[i]; e != null; e = e.next) {
+        Object k;
+        // 判断该条链上是否有hash值相同的(key相同)
+        // 若存在相同，则直接覆盖value，返回旧value
+        if (e.hash == hash && ((k = e.key) == key || key.equals(k))) {
+            V oldValue = e.value;
+            e.value = value;
+            e.recordAccess(this);
+            return oldValue;
+        }
+    }
+    // 如果i索引处的Entry为null，表明此处还没有Entry。
+    modCount++;
+    // 将key、value添加到i索引处。
+    addEntry(hash, key, value, i);
+    return null;
+}
 
+```
+分析了上面put()方法源代码中可以看出：当我们向HashMap中put元素的时候，先根据key的hashCode的值计算hash值，根据hash值得到这个元素在数组中的位置（即下标），如果数组该位置上已经存放有其他元素了，那么在这个位置上的元素将以链表的形式存放，新加入的放在链头，最先加入的放在链尾。如果数组该位置上没有元素，就直接将该元素放到此数组中的该位置上。addEntry(hash, key, value, i)方法根据计算出的hash值，将key-value对放在数组table的i索引处。addEntry 是 HashMap 提供的一个包访问权限的方法，代码如下：
+``` java
+void addEntry(int hash, K key, V value, int bucketIndex) {     // 根据bucketIndex 获取对应的 Entry   
+    Entry<K,V> e = table[bucketIndex];  
+    // 将新创建的 Entry 放入 bucketIndex 索引处，并让新的 Entry 指向原来的 Entry  
+    table[bucketIndex] = new Entry<K,V>(hash, key, value, e);  
+    // 如果 Map 中的 key-value 对的数量超过了极限
+    if (size++ >= threshold)  
+    // 把 table 对象的长度扩充到原来的2倍。  
+        resize(2 * table.length);  
+}  
 
+```
+- 2，获取：
 
+```java 
+public V get(Object key) {  
+    // 如果key = null时，返回null对应的value值。
+    if (key == null)  
+        return getForNullKey(); 
+    // 根据key的hashcode值做hash获取对应的值
+    int hash = hash(key.hashCode()); 
+    // 根据指定hash值在找到对应的table中的索引，并根据索引获取该处的Entry，通过循环不断遍历 e 元素的下一个元素。
+    for (Entry<K,V> e = table[indexFor(hash, table.length)];  
+        e != null;  
+        e = e.next) {  
+        Object k;  
+        // 判断e元素的hash与hash是否相等，如果相等并且e元素与key相等则返回e的原则的value
+        if (e.hash == hash && ((k = e.key) == key || key.equals(k)))  
+            return e.value;  
+    }  
+    // 如果指定hash值在找到对应的table中的索引，并根据索引获取该处的Entry的为null，则返回null。
+    return null;  
+}  
+``` 
+从get()的源代码中可以看出：从HashMap中get元素时，首先计算key的hashCode，通过IndexFor(hash,table.length)找到数组中对应位置的某一元素，然后通过key的equals方法在对应位置的链表中找到需要的元素。
 
+- 3,HashMap 在底层将 key-value 当成一个整体进行处理，这个整体就是 Entry 对象。HashMap 底层采用一个 Entry[] 数组来保存所有的 key和value 键值对，当需要存储一个 Entry 对象时，会根据hash算法来决定其在数组中的存储位置，然后根据equals方法决定其在该数组位置上的链表中的存储位置；同样的当我们需要取出一个Entry时，也会根据hash算法找到其在数组中的存储位置，再根据equals方法从该位置上的链表中取出该Entry。
 
 
 
