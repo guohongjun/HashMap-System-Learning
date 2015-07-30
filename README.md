@@ -23,7 +23,7 @@ public class HashMap<K,V>
 简单地说，hashmap的key做hash算法，并将hash值映射到内存地址，直接取得key对应的value。
 HashMap的高性能需要保证以下几点：
 
-- 将key hashd的算法必须是高效的
+- 将key hash的算法必须是高效的
 - hash值映射到内存地址（数组索引）的算法是快速的
 - 根据内存地址（数组索引）可以直接取得对应的值
 
