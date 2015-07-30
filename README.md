@@ -106,18 +106,26 @@ public V put(K key, V value) {
 分析了上面put()方法源代码中可以看出：当我们向HashMap中put元素的时候，先根据key的hashCode的值计算hash值，根据hash值得到这个元素在数组中的位置（即下标），如果数组该位置上已经存放有其他元素了，那么在这个位置上的元素将以链表的形式存放，新加入的放在链头，最先加入的放在链尾。如果数组该位置上没有元素，就直接将该元素放到此数组中的该位置上。addEntry(hash, key, value, i)方法根据计算出的hash值，将key-value对放在数组table的i索引处。addEntry 是 HashMap 提供的一个包访问权限的方法，代码如下：
 ``` java
 void addEntry(int hash, K key, V value, int bucketIndex) {
-
-    // 根据bucketIndex 获取对应的 Entry   
-    Entry<K,V> e = table[bucketIndex];  
-    // 将新创建的 Entry 放入 bucketIndex 索引处，并让新的 Entry 指向原来的 Entry  
-    table[bucketIndex] = new Entry<K,V>(hash, key, value, e);  
-    // 如果 Map 中的 key-value 对的数量超过了极限
-    if (size++ >= threshold)  
-    // 把 table 对象的长度扩充到原来的2倍。  
-        resize(2 * table.length);  
-}  
+ // 如果 Map 中的 key-value 对的数量超过了极限
+    if ((size >= threshold) && (null!=table[bucketIndex])){
+        // 把 table 对象的长度扩充到原来的2倍。 
+        resize(2 * table.length);
+        hash = (null != key) ? hash(key) : 0;
+        bucketIndex = indexFor(hash, table.length);
+    }
+    createEntry(hash, key, value, bucketIndex);
+}
+    
+void createEntry(int hash, K key, V value, int bucketIndex) {
+    // 根据bucketIndex 获取对应的 Entry  
+    Entry<K,V> e = table[bucketIndex];
+    // 将新创建的 Entry 放入 bucketIndex 索引处，并让新的 Entry 指向原来的 Entry 
+    table[bucketIndex] = new Entry<>(hash, key, value, e);
+    size++;
+}
 
 ```
+
 ```java
 static int hash(int h) {
     h ^= (h >>> 20) ^ (h >>> 12);
@@ -200,6 +208,30 @@ final Entry<K,V> nextEntry() {
 
 ##Hash冲突以及如何解决hash冲突##
 其实，我在说hashmap存储的时候，已经简单地说起了hashmap的hash冲突。一次在面试的时候被人问起来了这个事，当时没有答上来，觉得有点丢人哈。为了让读了我的这篇文章的人以后避免我的感概，所以我就给大家介绍一下该hashmap的hash冲突。
+```java 
+ public V put(K key, V value) {  
+    if (key == null)  
+           return putForNullKey(value);  
+    int hash = hash(key.hashCode());  
+    int i = indexFor(hash, table.length);  
+    for (Entry<K,V> e = table[i]; e != null; e = e.next) {  
+        Object k;  
+        //判断当前确定的索引位置是否存在相同hashcode和相同key的元素，如果存在相同的hash值和相同的key的元素，那么新值覆盖原来的旧值，并返回旧值。  
+        //如果存在相同的hash值，那么他们确定的索引位置就相同，这时判断他们的key是否相同，如果不相同，这时就是产生了我们常说的hash冲突。  
+        //Hash冲突后，那么HashMap的单个bucket里存储的不是一个 Entry，而是一个 Entry 链。  
+        //系统只能必须按顺序遍历每个Entry，直到找到想搜索的 Entry 为止——如果恰好要搜索的Entry位于该Entry链的最末端（该 Entry 是最早放入该 bucket 中） 
+        if (e.hash == hash && ((k = e.key) == key || key.equals(k))) {  
+            V oldValue = e.value;  
+            e.value = value;  
+            return oldValue;  
+            }  
+        }  
+        modCount++;  
+        addEntry(hash, key, value, i);  
+        return null;  
+}  
+
+```
 
 
 ##HashMap和Hashtable区别##
