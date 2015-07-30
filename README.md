@@ -62,9 +62,9 @@ public HashMap(int initialCapacity, float loadFactor) {
 
 ##HashMap的几个关键属性##
 #### 1，initialCapacity
+- initialCapacity为hashmap的最大容量，也就是底层数组的长度。
 #### 2，加载因子loadFactor
 
-- initialCapacity为hashmap的最大容量，也就是底层数组的长度。
 - loadFactor为加载因子，即散列表的实际元素数目(n)/ 散列表的容量(m)。另外，laodFactor越大，存储长度越小，查询时间越长。loadFactor越小，存储长度越大，查询时间短。hashmap默认的是0.75.负载因子衡量的是一个散列表的空间的使用程度，负载因子越大表示散列表的装填程度越高，反之愈小。对于使用链表法的散列表来说，查找一个元素的平均时间是O(1+a)。
 
 ##HashMap的存取实现##
@@ -102,9 +102,12 @@ public V put(K key, V value) {
     return null;
 }
 ```
+
 分析了上面put()方法源代码中可以看出：当我们向HashMap中put元素的时候，先根据key的hashCode的值计算hash值，根据hash值得到这个元素在数组中的位置（即下标），如果数组该位置上已经存放有其他元素了，那么在这个位置上的元素将以链表的形式存放，新加入的放在链头，最先加入的放在链尾。如果数组该位置上没有元素，就直接将该元素放到此数组中的该位置上。addEntry(hash, key, value, i)方法根据计算出的hash值，将key-value对放在数组table的i索引处。addEntry 是 HashMap 提供的一个包访问权限的方法，代码如下：
 ``` java
-void addEntry(int hash, K key, V value, int bucketIndex) {     // 根据bucketIndex 获取对应的 Entry   
+void addEntry(int hash, K key, V value, int bucketIndex) {
+
+    // 根据bucketIndex 获取对应的 Entry   
     Entry<K,V> e = table[bucketIndex];  
     // 将新创建的 Entry 放入 bucketIndex 索引处，并让新的 Entry 指向原来的 Entry  
     table[bucketIndex] = new Entry<K,V>(hash, key, value, e);  
@@ -115,6 +118,23 @@ void addEntry(int hash, K key, V value, int bucketIndex) {     // 根据bucketIn
 }  
 
 ```
+```java
+static int hash(int h) {
+    h ^= (h >>> 20) ^ (h >>> 12);
+    return h ^ (h >>> 7) ^ (h >>> 4);
+}
+```
+hash方法，该方法为一个纯粹的数学计算，就是计算h的hash值。
+我们知道对于HashMap的table而言，数据分布需要均匀（最好每项都只有一个元素，这样就可以直接找到），不能太紧也不能太松，太紧会导致查询速度慢，太松则浪费空间。计算hash值后，怎么才能保证table元素分布均与呢？我们会想到取模，但是由于取模的消耗较大，HashMap是这样处理的：调用indexFor方法。
+```java
+static int indexFor(int h, int length) {
+    return h & (length-1);
+}
+
+```
+HashMap的底层数组长度总是2的n次方，在构造函数中存在：capacity <<= 1;这样做总是能够保证HashMap的底层数组长度为2的n次方。当length为2的n次方时，h&(length - 1)就相当于对length取模，而且速度比直接取模快得多，这是HashMap在速度上的一种优化。至于为什么是2的n次方下面解释。
+我们回到indexFor方法，该方法仅有一条语句：h&(length - 1)，这句话除了上面的取模运算外还有一个非常重要的责任：均匀分布table数据和充分利用空间。
+
 - 2，获取：
 
 ```java 
