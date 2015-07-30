@@ -232,6 +232,31 @@ final Entry<K,V> nextEntry() {
 }  
 
 ```
+Hashmap里面的bucket出现了单链表的形式，散列表要解决的一个问题就是散列值的冲突问题，通常是两种方法：链表法和开放地址法。链表法就是将相同hash值的对象组织成一个链表放在hash值对应的槽位；开放地址法是通过一个探测算法，当某个槽位已经被占据的情况下继续查找下一个可以使用的槽位。java.util.HashMap采用的链表法的方式，链表是单向链表。形成单链表的核心代码如下：
+
+```java 
+void addEntry(int hash, K key, V value, int bucketIndex) {
+ // 如果 Map 中的 key-value 对的数量超过了极限
+    if ((size >= threshold) && (null!=table[bucketIndex])){
+        // 把 table 对象的长度扩充到原来的2倍。 
+        resize(2 * table.length);
+        hash = (null != key) ? hash(key) : 0;
+        bucketIndex = indexFor(hash, table.length);
+    }
+    createEntry(hash, key, value, bucketIndex);
+}
+    
+void createEntry(int hash, K key, V value, int bucketIndex) {
+    // 根据bucketIndex 获取对应的 Entry  
+    Entry<K,V> e = table[bucketIndex];
+    // 将新创建的 Entry 放入 bucketIndex 索引处，并让新的 Entry 指向原来的 Entry 
+    table[bucketIndex] = new Entry<>(hash, key, value, e);
+    size++;
+}
+
+```
+上面方法的代码大家可以看出，系统总是将新添加的 Entry 对象放入 table 数组的 bucketIndex 索引处——如果 bucketIndex 索引处已经有了一个 Entry 对象，那新添加的 Entry 对象指向原有的 Entry 对象（产生一个 Entry 链），如果 bucketIndex 索引处没有 Entry 对象，也就是上面程序代码的 e 变量是 null，也就是新放入的 Entry 对象指向 null，也就是没有产生 Entry 链。
+       HashMap里面没有出现hash冲突时，没有形成单链表时，hashmap查找元素很快,get()方法能够直接定位到元素，但是出现单链表后，单个bucket 里存储的不是一个 Entry，而是一个 Entry 链，系统只能必须按顺序遍历每个 Entry，直到找到想搜索的 Entry 为止——如果恰好要搜索的 Entry 位于该 Entry 链的最末端（该 Entry 是最早放入该 bucket 中），那系统必须循环到最后才能找到该元素。
 
 
 ##HashMap和Hashtable区别##
