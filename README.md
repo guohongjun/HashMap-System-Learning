@@ -101,7 +101,6 @@ public V put(K key, V value) {
     addEntry(hash, key, value, i);
     return null;
 }
-
 ```
 分析了上面put()方法源代码中可以看出：当我们向HashMap中put元素的时候，先根据key的hashCode的值计算hash值，根据hash值得到这个元素在数组中的位置（即下标），如果数组该位置上已经存放有其他元素了，那么在这个位置上的元素将以链表的形式存放，新加入的放在链头，最先加入的放在链尾。如果数组该位置上没有元素，就直接将该元素放到此数组中的该位置上。addEntry(hash, key, value, i)方法根据计算出的hash值，将key-value对放在数组table的i索引处。addEntry 是 HashMap 提供的一个包访问权限的方法，代码如下：
 ``` java
@@ -191,7 +190,5 @@ final Entry<K,V> nextEntry() {
 - hashmap可以key和value均可以为null，而hashtable则不可以。hashtable不允许null的值，hashtable的key为null的时候，hashtable调用put方法时，直接抛出NullPointerException。其它细微的差别还有，比如初始化Entry数组的大小等等。
 - hashtable是线程安全的，内部的方法基本都是synchronized。hashmap则不是线程安全的。
 - hashtable中的hash数组默认是11，增加方式old*2+1。hashmap中hash数组的默认大小是16，而且一定是2的指数。
-
-
 
 [1]: http://img.my.csdn.net/uploads/201211/17/1353118778_2052.png
