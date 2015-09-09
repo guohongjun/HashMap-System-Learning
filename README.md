@@ -1,4 +1,4 @@
-# 深入理解HashMap
+﻿# 深入理解HashMap
 我想大家对于HashMap并不陌生，程序员很多使用过该HashMap。估计很多公司面试的时候都会聊起HashMap，既然HashMap这么重要，今天我们就一起谈谈这个牛逼的HashMap。
 >* HashMap概述及实现原理
 >* HashMap的数据结构
@@ -171,7 +171,7 @@ public V get(Object key) {
 >总结：HashMap 在底层将 key-value 当成一个整体进行处理，这个整体就是 Entry 对象。HashMap 底层采用一个 Entry[] 数组来保存所有的 key和value 键值对，当需要存储一个 Entry 对象时，会根据hash算法来决定其在数组中的存储位置，然后根据equals方法决定其在该数组位置上的链表中的存储位置；同样的当我们需要取出一个Entry时，也会根据hash算法找到其在数组中的存储位置，再根据equals方法从该位置上的链表中取出该Entry。
 
 ##fail-fast策略##
-> fail-fast策略：我们知道hashmap不是线程安全的，如果我们在使用迭代器过程中其他线程更改了map，就会抛出ConcurrentModificationException，这就是所谓fail-fast策略。
+> fail-fast策略：我们知道hashmap不是线程安全的，如果我们在使用迭代器过程中其他线程更改了该map，就会抛出ConcurrentModificationException，这就是所谓fail-fast策略。
 
 那么这个fail-fast策略是如何实现的呢？
 这个策略主要是通过modCount的这个值实现的，modCount顾名思义就是hashmap的修改次数。每次在hashmap的内容被修改都会增加这个值，那么在hashmap的迭代器被初始化的都会将这个值赋值给expectedModCount。
@@ -261,7 +261,7 @@ void createEntry(int hash, K key, V value, int bucketIndex) {
 
 
 ##HashMap和Hashtable区别##
-> hashMap和hashTable采用的是相同的存储机制，两者的实现基本一致。
+> hashMap和hashTable采用的是相同的存储机制，因此两者的实现基本一致。
 
 不同的是：
 
