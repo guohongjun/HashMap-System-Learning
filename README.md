@@ -8,7 +8,7 @@
 >* Hash冲突以及如何解决hash冲突
 >* HashMap和Hashtable区别
 
-## HashMap概述 ##
+## `HashMap概述` ##
 
 >定义：HashMap实现了Map接口，继承自AbstractMap。其中Map接口定义了键映射到值的规则，而AbstractMap类提供 Map 接口的骨干实现，以最大限度地减少实现此接口所需的工作，其实AbstractMap类已经实现了Map，这里标注MapLZ觉得应该是更加清晰！
 
@@ -19,7 +19,7 @@ public class HashMap<K,V>
 
 }
 ```
-**实现原理:**
+**`实现原理:`**
 简单地说，hashmap的key做hash算法，并将hash值映射到内存地址，直接取得key对应的value。
 HashMap的高性能需要保证以下几点：
 
@@ -27,7 +27,7 @@ HashMap的高性能需要保证以下几点：
 - hash值映射到内存地址（数组索引）的算法是快速的
 - 根据内存地址（数组索引）可以直接取得对应的值
 
-##HashMap的数据结构##
+##`HashMap的数据结构`##
 >hashmap的数据结构：在java语言中，最基本的数据结构就两种，一种是数组，另一种是模拟指针（引用），所有的数据结构都可以使用这两种数据结构构造，hashmap也是可以这样的。hashmap其实就是链表散列，是数组和链表的结合体。图片来自于[作者：egg](xtfggef@gmail.com)的文章。
 ![此处输入图片的描述][1]
 
@@ -60,7 +60,7 @@ public HashMap(int initialCapacity, float loadFactor) {
 }
 ```
 
-##HashMap的几个关键属性##
+##`HashMap的几个关键属性`##
 #### 1，initialCapacity
 - initialCapacity为hashmap的最大容量，也就是底层数组的长度。
 
@@ -68,7 +68,7 @@ public HashMap(int initialCapacity, float loadFactor) {
 
 - loadFactor为加载因子，即散列表的实际元素数目(n)/ 散列表的容量(m)。另外，laodFactor越大，存储长度越小，查询时间越长。loadFactor越小，存储长度越大，查询时间短。hashmap默认的是0.75.负载因子衡量的是一个散列表的空间的使用程度，负载因子越大表示散列表的装填程度越高，反之愈小。对于使用链表法的散列表来说，查找一个元素的平均时间是O(1+a)。
 
-##HashMap的存取实现##
+##`HashMap的存取实现`##
 - 1,存储：
 我们先看看hashmap的put()方法的源码：
 ```java 
@@ -207,7 +207,7 @@ final Entry<K,V> nextEntry() {
 }
 ```
 
-##Hash冲突以及如何解决hash冲突##
+##`Hash冲突以及如何解决hash冲突`##
 其实，我在说hashmap存储的时候，已经简单地说起了hashmap的hash冲突。一次在面试的时候被人问起来了这个事，当时没有答上来，觉得有点丢人哈。为了让读了我的这篇文章的人以后避免我的感概，所以我就给大家介绍一下该hashmap的hash冲突。
 ```java 
  public V put(K key, V value) {  
@@ -260,7 +260,7 @@ void createEntry(int hash, K key, V value, int bucketIndex) {
        HashMap里面没有出现hash冲突时，没有形成单链表时，hashmap查找元素很快,get()方法能够直接定位到元素，但是出现单链表后，单个bucket 里存储的不是一个 Entry，而是一个 Entry 链，系统只能必须按顺序遍历每个 Entry，直到找到想搜索的 Entry 为止——如果恰好要搜索的 Entry 位于该 Entry 链的最末端（该 Entry 是最早放入该 bucket 中），那系统必须循环到最后才能找到该元素。
 
 
-##HashMap和Hashtable区别##
+##`HashMap和Hashtable区别`##
 > hashMap和hashTable采用的是相同的存储机制，因此两者的实现基本一致。
 
 不同的是：
