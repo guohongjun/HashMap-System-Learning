@@ -1,12 +1,13 @@
-﻿# 深入理解HashMap
-我想大家对于HashMap并不陌生，程序员很多使用过该HashMap。估计很多公司面试的时候都会聊起HashMap，既然HashMap这么重要，今天我们就一起谈谈这个牛逼的HashMap。
->* HashMap概述及实现原理
->* HashMap的数据结构
->* HashMap的几个关键属性
->* HashMap的存取实现
->* fail-fast策略
->* Hash冲突以及如何解决hash冲突
->* HashMap和Hashtable区别
+# 深入理解HashMap
+我想大家对于HashMap并不陌生，程序员基本上使用过HashMap。估计很多公司面试的时候都会聊起HashMap，既然HashMap这么重要，今天我们就一起谈谈这个牛逼的HashMap。
+
+* HashMap概述及实现原理
+* HashMap的数据结构
+* HashMap的几个关键属性
+* HashMap的存取实现
+* fail-fast策略
+* Hash冲突以及如何解决hash冲突
+* HashMap和Hashtable区别
 
 ## `HashMap概述` ##
 
