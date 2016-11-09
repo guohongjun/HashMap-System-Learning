@@ -20,8 +20,24 @@ public class HashMap<K,V>
 
 }
 ```
+**特点：**
+
+数组的特点：
+
+```
+寻址容易，插入和删除困难；
+
+```
+
+链表的特点：
+
+```
+寻址困难，插入和删除容易。
+```
+
 **`实现原理:`**
 简单地说，hashmap的key做hash算法，并将hash值映射到内存地址，直接取得key对应的value。
+
 HashMap的高性能需要保证以下几点：
 
 - 将key hash的算法必须是高效的
@@ -30,7 +46,8 @@ HashMap的高性能需要保证以下几点：
 
 ##`HashMap的数据结构`##
 >hashmap的数据结构：在java语言中，最基本的数据结构就两种，一种是数组，另一种是模拟指针（引用），所有的数据结构都可以使用这两种数据结构构造，hashmap也是可以这样的。hashmap其实就是链表散列，是数组和链表的结合体。图片来自于[作者：egg](xtfggef@gmail.com)的文章。
-![此处输入图片的描述][1]
+>
+>![此处输入图片的描述][1]
 
 观察hashmap的结构图，我们了解到hashmap底层是一个数组，数组中每一项是一个链表。HashMap提供了三个构造函数：
 
@@ -71,7 +88,7 @@ public HashMap(int initialCapacity, float loadFactor) {
 
 ##`HashMap的存取实现`##
 - 1,存储：
-我们先看看hashmap的put()方法的源码：
+  我们先看看hashmap的put()方法的源码：
 ```java 
 public V put(K key, V value) {
     // 如果table为null，inflate 该table
@@ -166,7 +183,7 @@ public V get(Object key) {
     // 如果指定hash值在找到对应的table中的索引，并根据索引获取该处的Entry的为null，则返回null。
     return null;  
 }  
-``` 
+```
 从get()的源代码中可以看出：从HashMap中get元素时，首先计算key的hashCode，通过IndexFor(hash,table.length)找到数组中对应位置的某一元素，然后通过key的equals方法在对应位置的链表中找到需要的元素。
 
 >总结：HashMap 在底层将 key-value 当成一个整体进行处理，这个整体就是 Entry 对象。HashMap 底层采用一个 Entry[] 数组来保存所有的 key和value 键值对，当需要存储一个 Entry 对象时，会根据hash算法来决定其在数组中的存储位置，然后根据equals方法决定其在该数组位置上的链表中的存储位置；同样的当我们需要取出一个Entry时，也会根据hash算法找到其在数组中的存储位置，再根据equals方法从该位置上的链表中取出该Entry。
