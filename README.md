@@ -242,7 +242,16 @@ final Entry<K,V> nextEntry() {
 ```
 
 ##`Hash冲突以及如何解决hash冲突`##
-其实，我在说hashmap存储的时候，已经简单地说起了hashmap的hash冲突。一次在面试的时候被人问起来了这个事，当时没有答上来，觉得有点丢人哈。为了让读了我的这篇文章的人以后避免我的感概，所以我就给大家介绍一下该hashmap的hash冲突。
+#### 疑问：如果两个key通过hash % Entry[].length得到的index相同，会不会有覆盖的危险？
+
+这里 *HashMap*里面用到链式数据结构的一个概念.上面我们提到过 *Entry* 类里面有一个 *next*属性,作用是指向下一个 *Entry*。打个比方, 第一个键值对A进来,通过计算其 *key*的 *hash*得到的 *index=0，* 记做: *Entry[0] = A.*一会后又进来一个键值对B,通过计算其 *index*也等于0,现在怎么办？ *HashMap*会这样做 :*B.next = A,Entry[0] = B,*如果又进来C,index也等于0,那么C.next = B,Entry[0] = C；这样我们发现index=0的地方其实存取了A,B,C三个键值对,他们通过next这个属性链接在一起。所以疑问不用担心。
+
+当然HashMap里面也包含一些优化方面的实现，这里也啰嗦一下。 比如：Entry[]的长度一定后，随着map里面数据的越来越长，这样同一个index的链就会很长，会不会影响性能？HashMap里面设置一个因素（也称为因子），随着map的size越来越大，Entry[]会以一定的规则加长长度。
+
+
+
+### hash冲突解决办法
+
 ```java 
  public V put(K key, V value) {  
     if (key == null)  
@@ -288,7 +297,6 @@ void createEntry(int hash, K key, V value, int bucketIndex) {
     table[bucketIndex] = new Entry<>(hash, key, value, e);
     size++;
 }
-
 ```
 上面方法的代码大家可以看出，系统总是将新添加的 Entry 对象放入 table 数组的 bucketIndex 索引处——如果 bucketIndex 索引处已经有了一个 Entry 对象，那新添加的 Entry 对象指向原有的 Entry 对象（产生一个 Entry 链），如果 bucketIndex 索引处没有 Entry 对象，也就是上面程序代码的 e 变量是 null，也就是新放入的 Entry 对象指向 null，也就是没有产生 Entry 链。
        HashMap里面没有出现hash冲突时，没有形成单链表时，hashmap查找元素很快,get()方法能够直接定位到元素，但是出现单链表后，单个bucket 里存储的不是一个 Entry，而是一个 Entry 链，系统只能必须按顺序遍历每个 Entry，直到找到想搜索的 Entry 为止——如果恰好要搜索的 Entry 位于该 Entry 链的最末端（该 Entry 是最早放入该 bucket 中），那系统必须循环到最后才能找到该元素。
