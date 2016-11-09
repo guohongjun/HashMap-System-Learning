@@ -311,4 +311,53 @@ void createEntry(int hash, K key, V value, int bucketIndex) {
 - hashtable是线程安全的，内部的方法基本都是synchronized。hashmap则不是线程安全的。
 - hashtable中的hash数组默认是11，增加方式old*2+1。hashmap中hash数组的默认大小是16，而且一定是2的指数。
 
+
+
+- HashTable有一个contains(Object value)，功能和containsValue(Object value)功能一样。
+- HashTable使用Enumeration，HashMap使用Iterator。
+
+以上只是表面的不同，它们的实现也有很大的不同。
+
+- HashTable中hash数组默认大小是11，增加的方式是 old*2+1。HashMap中hash数组的默认大小是16，而且一定是2的指数。
+- 哈希值的使用不同，HashTable直接使用对象的hashCode，代码是这样的：
+
+``` java 
+int hash = key.hashCode();
+
+int index = (hash & 0x7FFFFFFF) % tab.length;
+
+而HashMap重新计算hash值，而且用与代替求模：
+
+int hash = hash(k);
+
+int i = indexFor(hash, table.length);
+
+static int hash(Object x) {
+
+　　int h = x.hashCode();
+
+　　h += ~(h << 9);
+
+　　h ^= (h >>> 14);
+
+　　h += (h << 4);
+
+　　h ^= (h >>> 10);
+
+　　return h;
+
+}
+
+static int indexFor(int h, int length) {
+
+　　return h & (length-1);
+
+}
+
+```
+
+
+以上只是一些比较突出的区别，当然他们的实现上还是有很多不同的，比如
+HashMap对null的操作
+
 [1]: http://img.my.csdn.net/uploads/201211/17/1353118778_2052.png
